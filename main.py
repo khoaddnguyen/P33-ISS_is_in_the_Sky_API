@@ -1,7 +1,7 @@
 # send email to user when the ISS is close to their current position
 # code runs every 60 secs
 import requests
-from datetime import datetime
+from datetime import datetime, time
 import smtplib
 
 MY_EMAIL = "aaa@gmail.com"
@@ -43,14 +43,16 @@ def is_night():
     if time_now >= sunset or time_now <= sunrise:
         return True
 
-if is_iss_overhead() and is_night():
-    connection = smtplib.SMTP("smtp.gmail.com")
-    connection.starttls()
-    connection.login(MY_EMAIL, MY_PASSWORD)
-    connection.sendmail(
-        from_addr=MY_EMAIL,
-        to_addrs=MY_EMAIL,
-        msg="Subject: Look Up \n\n The ISS is above you in the sky :)"
-    )
+while True:
+    time.sleep(60)
+    if is_iss_overhead() and is_night():
+        connection = smtplib.SMTP("smtp.gmail.com")
+        connection.starttls()
+        connection.login(MY_EMAIL, MY_PASSWORD)
+        connection.sendmail(
+            from_addr=MY_EMAIL,
+            to_addrs=MY_EMAIL,
+            msg="Subject: Look Up \n\n The ISS is above you in the sky :)"
+        )
 # send an email when ISS is overhead and when it's dark so they can see the ISS in the sky
 
